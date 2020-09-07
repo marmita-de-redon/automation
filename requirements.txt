@@ -1,0 +1,3 @@
+oauth2client==4.1.3
+selenium==3.141.0
+shoogle==0.1.4
