@@ -1,0 +1,3 @@
+[submodule "oysttyer"]
+	path = oysttyer
+	url = https://github.com/oysttyer/oysttyer.git
