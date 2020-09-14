@@ -50,3 +50,10 @@ curl -LO https://archive.org/download/ia-pex/ia
 chmod +x ia
 ./ia configure #login
 ``` 
+
+## Oysttyer
+
+First time run:
+```
+perl oysttyer/oysttyer.pl -keyf=./.oysttyerkey -rc=$(pwd)/.oysttyerrc -oauthwizard
+``` 

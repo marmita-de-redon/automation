@@ -39,6 +39,12 @@ BASE_IMAGE_PATH="../images/base_thumbnail.png"        # used on youtube and epis
 YOUTUBE_TITLE="Episode #${EPISODE_NUMBER} - ${TITLE}" # youtube title
 ARCHIVE_ORG_IDENTIFIER_PREFIX="test-mypodcast-"       # archive.org unique identifier
 
+_sxxexx=$(printf "s%02de%02d" "${SEASON_NUMBER}" "${EPISODE_NUMBER}") # s01e01
+_SxxExx=$(printf "S%02dE%02d" "${SEASON_NUMBER}" "${EPISODE_NUMBER}") # S01E01
+
+SOCIAL_SHARE_POST_URL="https://example.com/post/${_sxxexx}"           # Episode to share on social media (twitter)
+SOCIAL_SHARE_MESSAGE="New Episode: ${TITLE} ${SOCIAL_SHARE_POST_URL}" # Message shared on social media
+
 # Attribution and common text
 FOOTER_MD_TEXT="
 ## Attribution and Licences
@@ -50,9 +56,6 @@ Or any other text to include in every episode
 "
 
 ### Technical ################################################################################
-_sxxexx=$(printf "s%02de%02d" "${SEASON_NUMBER}" "${EPISODE_NUMBER}")
-_SxxExx=$(printf "S%02dE%02d" "${SEASON_NUMBER}" "${EPISODE_NUMBER}")
-
 IA_BIN="./ia" # internet archive api binary # https://archive.org/download/ia-pex/ia
 GOOGLE_CREDENTIALS_PATH="client_secrets.json"
 YOUTUBE_TEMPLATE_JSON_PATH="upload-video.template.json"

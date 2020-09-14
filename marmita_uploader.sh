@@ -286,6 +286,21 @@ function .commit_and_push_website() {
 
 }
 
+function .share_on_twitter() {
+  echo -e "\n${BOLD}********** Share on Twitter *************${NORMAL}"
+  echo -e "Content: ${GREEN}${SOCIAL_SHARE_MESSAGE}${NORMAL}"
+  echo -e ""
+
+  read -p "Tweet? [Y/n] " choice
+  if [[ "$choice" =~ [nN] ]]; then
+    echo "Skip twitter share..."
+    return
+  fi
+
+  echo "${SOCIAL_SHARE_MESSAGE}" | perl oysttyer/oysttyer.pl -keyf="$(pwd)/.oysttyerkey" -rc="$(pwd)/.oysttyerrc"
+
+}
+
 #    __  __       _
 #   |  \/  |     (_)
 #   | \  / | __ _ _ _ __
@@ -306,6 +321,8 @@ function .main() {
 
   .create_markdown_file
   .commit_and_push_website
+
+  .share_on_twitter
 }
 
 .main
