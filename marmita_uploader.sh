@@ -153,6 +153,7 @@ function .upload_audio_to_archive_org() {
   "${IA_BIN}" upload "${ARCHIVE_ORG_IDENTIFIER}" \
     "${AUDIO_PATH}" \
     "${THUMBNAIL_PATH}" \
+    "${SMALL_THUMBNAIL_PATH}" \
     --metadata="mediatype:audio" \
     --metadata="language:por" \
     --retries 5
@@ -188,8 +189,7 @@ function .render_video() {
     fi
   fi
 
-  ffmpeg -loop 1 -i "${SMALL_THUMBNAIL_PATH}" -i "${AUDIO_PATH}" -r 1 -c:v libx264 -tune stillimage -shortest -y "${VIDEO_PATH}"
-  # ffmpeg -loop 1 -i "${BASE_IMAGE_PATH}" -i "${AUDIO_PATH}" -c:v libx264 -tune stillimage -c:a aac -b:a 192k -pix_fmt yuv420p -shortest out.mp4
+  ffmpeg -loop 1 -i "${SMALL_THUMBNAIL_PATH}" -i "${AUDIO_PATH}" -shortest -acodec copy "${VIDEO_PATH}" -y
 }
 
 function .upload_to_youtube() {
@@ -232,8 +232,8 @@ function .create_markdown_file() {
     if [[ "$choice" =~ [yY] ]]; then
       echo "Overriding file ${POST_PATH}"
     else
-      echo "Exiting..."
-      exit 2
+      echo "Skip post creation..."
+      return
     fi
   else
     read -p "Create post (locally)? [Y/n] " choice
