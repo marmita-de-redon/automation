@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
+set -u
 
-if [[ ! -f "marmita_form.sh" ]]; then
-  echo "marmita_form.sh must exist. Copy from marmita_form.example.sh"
+if [[ $# -ne 1 ]]; then
+  echo "Usage: $0 <episode.env>"
+  exit 1
+fi
+
+# Load all variables
+EPISODE_ENV_FILE="$1"
+if [[ ! -f "${EPISODE_ENV_FILE}" ]]; then
+  echo "'${EPISODE_ENV_FILE}' file does not exist. Copy from episode-s01e01.example.env"
   echo "Exiting..."
   exit 3
 fi
-source marmita_form.sh
+source "${EPISODE_ENV_FILE}"
 
 # Print stuff
 GREEN="\033[32;1m"
