@@ -104,8 +104,16 @@ function .check_pre_requisites() {
     echo "VIDEO_PATH $(dirname ${VIDEO_PATH}) directory does not exist"
     exit 3
   fi
-  if [[ ! -d "$(dirname ${POST_PATH})" ]]; then
-    echo "POST_PATH $(dirname ${POST_PATH}) directory does not exist"
+  if [[ ! -d "$(dirname "${WEBSITE_GIT_PATH}")" ]]; then
+    echo "WEBSITE_GIT_PATH $(dirname "${WEBSITE_GIT_PATH}") directory does not exist"
+    exit 3
+  fi
+  if [[ ! -d "$(dirname "${WEBSITE_GIT_PATH}${POST_RELATIVE_PATH}")" ]]; then
+    echo "POST_RELATIVE_PATH $(dirname "${WEBSITE_GIT_PATH}${POST_RELATIVE_PATH}") directory does not exist"
+    exit 3
+  fi
+  if [[ ! -d "$(dirname "${WEBSITE_GIT_PATH}${POST_IMAGE_RELATIVE_PATH}")" ]]; then
+    echo "POST_IMAGE_RELATIVE_PATH $(dirname "${WEBSITE_GIT_PATH}${POST_IMAGE_RELATIVE_PATH}") directory does not exist"
     exit 3
   fi
   if [[ ! -d "$(dirname ${THUMBNAIL_PATH})" ]]; then
@@ -230,15 +238,19 @@ function .upload_to_youtube() {
 }
 
 function .create_markdown_file() {
+  local _markdown_post_file="${WEBSITE_GIT_PATH}${POST_RELATIVE_PATH}"
+  local _image_file="${WEBSITE_GIT_PATH}${POST_IMAGE_RELATIVE_PATH}"
+
   echo -e "\n${BOLD}********** Create publishing Post (website/rss) *************${NORMAL}"
-  echo -e "Destination File: ${GREEN}${POST_PATH}${NORMAL}"
+  echo -e "Destination Markdown File: ${GREEN}${_markdown_post_file}${NORMAL}"
+  echo -e "Image File: ${GREEN}${_image_file}${NORMAL}"
   echo -e "Content: ${GREEN}\n${BODY_MD_TEXT}${NORMAL}"
   echo -e ""
 
-  if [[ -f "${POST_PATH}" ]]; then
-    read -p "${POST_PATH} already exists. Override? [y/N] " choice
+  if [[ -f "${_markdown_post_file}" ]]; then
+    read -p "${_markdown_post_file} already exists. Override? [y/N] " choice
     if [[ "$choice" =~ [yY] ]]; then
-      echo "Overriding file ${POST_PATH}"
+      echo "Overriding file ${_markdown_post_file}"
     else
       echo "Skip post creation..."
       return
@@ -251,14 +263,15 @@ function .create_markdown_file() {
     fi
   fi
 
-  echo "${MARKDOWN_TEMPLATE}" >"${POST_PATH}"
+  echo "${MARKDOWN_TEMPLATE}" >"${_markdown_post_file}"
+  cp "${THUMBNAIL_PATH}" "${_image_file}"
 }
 
 function .commit_and_push_website() {
   (
     echo -e "\n${BOLD}********** Publishing Post with git (website/rss) *************${NORMAL}"
 
-    cd "$(dirname "${POST_PATH}")"
+    cd "${WEBSITE_GIT_PATH}"
     while ! git diff --cached --exit-code &>/dev/null; do
       echo -e "${RED}There are staged changes not yet committed."
       echo -e "You need to fix this manually.${NORMAL}"
@@ -275,7 +288,10 @@ function .commit_and_push_website() {
     TRACKING_REMOTE=$(git config "branch.${LOCAL_BRANCH}.remote")
     REMOTE_URL=$(git config "remote.${TRACKING_REMOTE}.url")
 
-    echo -e "File to commit: ${GREEN}$(basename ${POST_PATH})${NORMAL}"
+    echo -e "Executing git pull..."
+    git pull
+
+    echo -e "File to commit: ${GREEN}$(basename ${POST_RELATIVE_PATH})${NORMAL}"
     echo -e "push to ${GREEN}${REMOTE_URL}${NORMAL}"
     echo -e "remote/branch: ${GREEN}${TRACKING_REMOTE}/${LOCAL_BRANCH}${NORMAL}"
 
@@ -285,8 +301,9 @@ function .commit_and_push_website() {
       return
     fi
 
-    git add "$(basename "${POST_PATH}")"
-    git commit -m "Publishing $(basename "${POST_PATH}")"
+    git add "${POST_RELATIVE_PATH}"
+    git add "${POST_IMAGE_RELATIVE_PATH}"
+    git commit -m "Publishing $(basename "${POST_RELATIVE_PATH}") + $(basename "${POST_IMAGE_RELATIVE_PATH}")"
     git push
 
     [[ $? -ne 0 ]] && echo -e "${RED}Error pushing repository. Changes not pushed${NORMAL}"
