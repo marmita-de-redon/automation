@@ -34,6 +34,7 @@ def main():
   w, h = draw.textsize(text, font=font)
   position = (center_x-w/2, center_y-h/2) 
   
+  draw.text(position, text, align="center", fill=color, font=font)
   img_rgb = img_rgb.resize((1024,1024), resample=Image.BICUBIC)
   img_rgb.save(image_dest)
 
