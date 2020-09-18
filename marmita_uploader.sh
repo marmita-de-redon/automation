@@ -212,7 +212,7 @@ function .upload_to_youtube() {
   echo -e "\n${BOLD}*************** Publish video to youtube *******************${NORMAL}"
   echo -e "Publish date: ${GREEN}${PUBLISHED_AT}${NORMAL}"
   echo -e "Video file: ${GREEN}${VIDEO_PATH}${NORMAL}"
-  echo -e "Title file: ${GREEN}${TITLE}${NORMAL}"
+  echo -e "Title file: ${GREEN}${YOUTUBE_TITLE}${NORMAL}"
   echo -e "Description: ${GREEN}\n${BODY_MD_TEXT}${FOOTER_MD_TEXT}${NORMAL}"
   echo -e ""
 
@@ -291,7 +291,8 @@ function .commit_and_push_website() {
     echo -e "Executing git pull..."
     git pull
 
-    echo -e "File to commit: ${GREEN}$(basename ${POST_RELATIVE_PATH})${NORMAL}"
+    echo -e ""
+    echo -e "File to commit: ${GREEN}$(basename ${POST_RELATIVE_PATH}) + $(basename ${POST_IMAGE_RELATIVE_PATH})${NORMAL}"
     echo -e "push to ${GREEN}${REMOTE_URL}${NORMAL}"
     echo -e "remote/branch: ${GREEN}${TRACKING_REMOTE}/${LOCAL_BRANCH}${NORMAL}"
 
