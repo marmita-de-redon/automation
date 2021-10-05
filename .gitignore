@@ -2,3 +2,6 @@ env/
 client_secrets.json
 marmita_form.sh
 ia
+
+episode*.env
+!episode-s01e01.example.env
