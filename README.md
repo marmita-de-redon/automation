@@ -42,6 +42,7 @@ pip install -r requirements.dev.txt
 
 - jq (apt install jq)
 - shoogle (pip install shoogle)
+- oauth2client (pip install oauth2client)
 - ia (read bellow)
 
 ## install ia (internet archive)
