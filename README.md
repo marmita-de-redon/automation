@@ -1,7 +1,7 @@
 # How to
 
-- change all variables in `marmita-form.sh`
-- execute `./marmita_uploader.sh` (this is very interactive. Always ask before executing stuff)
+- create a copy of `episode-s01e01.example.env` and change all variables
+- execute `./marmita_uploader.sh episode-s01e01.example.env` (this is very interactive. Always ask before executing stuff)
 
 
 ## Features
@@ -12,10 +12,10 @@
 - render and upload video to youtube
 
 detailed:
-- creates a thumbnail image 
-  - from a base template (png), 
+- creates a thumbnail image
+  - from a base template (PNG image data, 3000 x 3000 - size matters!),
   - write the title on top of it
-  - you may test it with `python create_thumbnail.py`...
+  - you may test it with `python create_thumbnail.py <source_image> <dest_image> <dest_image_small> <text>` (after `. env/bin/activate`)
 - uploads to archive.org
   - audio file
   - thumbnails (better quality)
@@ -29,14 +29,13 @@ detailed:
 
 # Run locally
 
-- make sure python is installed
-- install selenium browser drivers (only Firefox was tested, so it is the recommended one)
+- make sure python3 and virtualenv is installed
 
 ```
-virtualenv -p "$(which python3)" env
+python3 -m virtualenv -p "$(which python3)" env
 . env/bin/activate
-pip install -r requirements.dev.txt
-``` 
+pip install -r requirements.txt
+```
 
 # Dependencies
 
@@ -49,11 +48,11 @@ pip install -r requirements.dev.txt
 curl -LO https://archive.org/download/ia-pex/ia
 chmod +x ia
 ./ia configure #login
-``` 
+```
 
 ## Oysttyer
 
 First time run:
 ```
 perl oysttyer/oysttyer.pl -keyf=./.oysttyerkey -rc=$(pwd)/.oysttyerrc -oauthwizard
-``` 
+```
