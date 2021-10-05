@@ -12,8 +12,8 @@
 - render and upload video to youtube
 
 detailed:
-- creates a thumbnail image 
-  - from a base template (png), 
+- creates a thumbnail image
+  - from a base template (png),
   - write the title on top of it
   - you may test it with `python create_thumbnail.py`...
 - uploads to archive.org
@@ -36,7 +36,7 @@ detailed:
 virtualenv -p "$(which python3)" env
 . env/bin/activate
 pip install -r requirements.dev.txt
-``` 
+```
 
 # Dependencies
 
@@ -50,11 +50,11 @@ pip install -r requirements.dev.txt
 curl -LO https://archive.org/download/ia-pex/ia
 chmod +x ia
 ./ia configure #login
-``` 
+```
 
 ## Oysttyer
 
 First time run:
 ```
 perl oysttyer/oysttyer.pl -keyf=./.oysttyerkey -rc=$(pwd)/.oysttyerrc -oauthwizard
-``` 
+```
