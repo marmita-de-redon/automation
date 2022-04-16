@@ -40,7 +40,7 @@ pip install -r requirements.txt
 # Dependencies
 
 - jq (apt install jq)
-- shoogle (pip install shoogle)
+- youtube-upload (https://github.com/tokland/youtube-upload)
 - ia (read bellow)
 
 ## install ia (internet archive)
