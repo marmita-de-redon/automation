@@ -19,7 +19,6 @@ pyparsing==2.4.6
 pytz==2021.3
 requests==2.22.0
 rsa==4.6
-shoogle==0.1.4
 six==1.14.0
 uritemplate==3.0.1
 urllib3==1.25.8

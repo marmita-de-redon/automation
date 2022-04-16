@@ -141,8 +141,8 @@ function .check_pre_requisites() {
     exit 2
   fi
 
-  if ! command -v "shoogle" >/dev/null 2>&1; then
-    echo "shoogle is not present."
+  if ! command -v "youtube-upload" >/dev/null 2>&1; then
+    echo "youtube-upload is not present."
     echo "Read README.md"
     exit 2
   fi
@@ -179,10 +179,6 @@ function .check_pre_requisites() {
   fi
   if [[ ! -f "${GOOGLE_CREDENTIALS_PATH}" ]]; then
     echo "GOOGLE_CREDENTIALS_PATH ${GOOGLE_CREDENTIALS_PATH} does not exist"
-    exit 3
-  fi
-  if [[ ! -f "${YOUTUBE_TEMPLATE_JSON_PATH}" ]]; then
-    echo "YOUTUBE_TEMPLATE_JSON_PATH ${YOUTUBE_TEMPLATE_JSON_PATH} does not exist"
     exit 3
   fi
   if [[ ! -d "$(dirname ${VIDEO_PATH})" ]]; then
@@ -323,12 +319,15 @@ function .upload_to_youtube() {
   fi
 
   if [[ "${_BATCH_MODE}" == 'no' || ${_AUTO_PUBLISH_TO_YOUTUBE} == 'yes' ]]; then
-    RESULT=$(jq -n -f "${YOUTUBE_TEMPLATE_JSON_PATH}" \
-      --arg title "${YOUTUBE_TITLE}" \
-      --arg description "${BODY_MD_TEXT}$(echo -e "\n\n")${FOOTER_MD_TEXT}" \
-      --arg privacystatus "${YOUTUBE_PRIVACY_STATUS}" \
-      --arg license "${YOUTUBE_LICENCE}" |
-      shoogle execute -c "${GOOGLE_CREDENTIALS_PATH}" youtube:v3.videos.insert - -f "${VIDEO_PATH}")
+    RESULT=$(youtube-upload \
+      --title="${YOUTUBE_TITLE}" \
+      --description="${BODY_MD_TEXT}$(echo -e "\n\n")${FOOTER_MD_TEXT}" \
+      --tags="${TAGS}" \
+      --client-secrets="${GOOGLE_CREDENTIALS_PATH}" \
+      --credentials-file="yt_credentials.json" \
+      --privacy="${YOUTUBE_PRIVACY_STATUS}" \
+      --publish-at="${PUBLISHED_AT}T22:45:00.0Z" \
+      ${VIDEO_PATH})
 
     if [[ $? -eq 0 ]]; then
       echo -e "OK - Episode published to https://youtube.com/watch?v=$(echo ${RESULT} | jq -r .id)"
